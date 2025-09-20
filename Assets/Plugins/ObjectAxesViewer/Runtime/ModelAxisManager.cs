@@ -30,6 +30,7 @@ public class ModelAxisManager : MonoBehaviour
     public bool includeInactivePieces = false;
     
     [Header("Axis Display Settings")]
+    [Range(1f, 150f)]
     public float globalAxisLength = 0.5f;
     [Range(1f, 150f)]
     public float globalAxisThickness = 2f;

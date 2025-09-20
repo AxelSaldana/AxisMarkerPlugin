@@ -33,7 +33,7 @@ public class AxisMarkerImprovedEditor : Editor
             // Configuracion de tamano
             EditorGUILayout.LabelField("Size Settings", EditorStyles.boldLabel);
             EditorGUI.BeginChangeCheck();
-            marker.axisLength = EditorGUILayout.Slider("Axis Length", marker.axisLength, 0.1f, 5f);
+            marker.axisLength = EditorGUILayout.Slider("Axis Length", marker.axisLength, 0.1f, 150f);
             marker.axisThickness = EditorGUILayout.Slider("Axis Thickness", marker.axisThickness, 1f, 150f);
             if (EditorGUI.EndChangeCheck())
             {
@@ -152,7 +152,7 @@ public class AxisMarkerImprovedEditor : Editor
             }
             if (GUILayout.Button("Reset Size"))
             {
-                marker.axisLength = 0.5f;
+                marker.axisLength = 150f;
                 marker.axisThickness = 2f;
                 EditorUtility.SetDirty(marker);
             }

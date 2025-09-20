@@ -4,8 +4,9 @@ using UnityEngine;
 public class AxisMarkerImproved : MonoBehaviour
 {
     [Header("Axis Settings")]
-    public bool showAxis = true;        // Activar/desactivar eje individual
-    public float axisLength = 0.5f;     // Tamano del eje
+    public bool showAxis = true;
+    [Range(1f, 150f)]// Activar/desactivar eje individual
+    public float axisLength = 150f;     // Tamano del eje
     [Range(1f, 150f)]
     public float axisThickness = 2f;    // Grosor de las lineas (1-150)
     
@@ -19,7 +20,7 @@ public class AxisMarkerImproved : MonoBehaviour
     public Color yAxisColor = Color.green;
     public Color zAxisColor = Color.blue;
     
-    [Header("Labels")]
+    [Header("Labels")   ]
     public bool showLabels = true;
     public float labelOffset = 0.1f;
     

@@ -8,7 +8,8 @@ using UnityEngine;
 public class AxisPluginSettings : ScriptableObject
 {
     [Header("Default Axis Settings")]
-    public float defaultAxisLength = 0.5f;
+    [Range(1f, 150f)]
+    public float defaultAxisLength = 150f;
     [Range(1f, 150f)]
     public float defaultAxisThickness = 2f;
     public bool defaultShowLabels = true;
@@ -126,7 +127,7 @@ public class AxisPluginSettings : ScriptableObject
     /// </summary>
     private void OnValidate()
     {
-        defaultAxisLength = Mathf.Clamp(defaultAxisLength, 0.1f, 10f);
+        defaultAxisLength = Mathf.Clamp(defaultAxisLength, 0.1f, 150f);
         defaultAxisThickness = Mathf.Clamp(defaultAxisThickness, 1f, 150f);
         defaultLabelOffset = Mathf.Clamp(defaultLabelOffset, 0f, 1f);
         maxMarkersPerModel = Mathf.Clamp(maxMarkersPerModel, 1, 1000);

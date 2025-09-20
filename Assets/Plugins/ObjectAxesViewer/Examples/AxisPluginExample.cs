@@ -173,7 +173,7 @@ public class AxisPluginExample : MonoBehaviour
         if (axisManager == null) return;
         
         // Configuracion personalizada
-        axisManager.globalAxisLength = 0.8f;
+        axisManager.globalAxisLength = 150f;
         axisManager.globalAxisThickness = 3f;
         axisManager.showLabels = true;
         axisManager.UpdateGlobalSettings();
@@ -233,7 +233,7 @@ public class AxisPluginExample : MonoBehaviour
         }
         
         // Restaurar tamano normal
-        axisManager.globalAxisLength = 0.5f;
+        axisManager.globalAxisLength = 150f;
         axisManager.UpdateGlobalSettings();
         
         Debug.Log("Animation completed");
@@ -255,7 +255,7 @@ public class AxisPluginExample : MonoBehaviour
             if (piece.gameObject.GetComponent<Renderer>() != null)
             {
                 // Objetos con renderer - ejes normales
-                piece.axisMarker.axisLength = 0.5f;
+                piece.axisMarker.axisLength = 150f;
                 piece.axisMarker.SetAxisVisibility(true, true, true);
             }
             

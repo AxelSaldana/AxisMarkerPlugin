@@ -13,7 +13,7 @@ public class ImprovedAxisManagerWindow : EditorWindow
     private bool showFilters = false;
     
     // Configuracion global
-    private float globalAxisLength = 0.5f;
+    private float globalAxisLength =150f;
     private float globalAxisThickness = 2f;
     private bool globalShowLabels = true;
     
@@ -150,7 +150,7 @@ public class ImprovedAxisManagerWindow : EditorWindow
             
             EditorGUI.BeginChangeCheck();
             
-            globalAxisLength = EditorGUILayout.Slider("Axis Length", globalAxisLength, 0.1f, 2f);
+            globalAxisLength = EditorGUILayout.Slider("Axis Length", globalAxisLength, 0.1f, 150f);
             globalAxisThickness = EditorGUILayout.Slider("Axis Thickness", globalAxisThickness, 1f, 150f);
             globalShowLabels = EditorGUILayout.Toggle("Show Labels", globalShowLabels);
             
