@@ -2,7 +2,7 @@
 
 A complete plugin to visualize coordinate axes (X, Y, Z) of all objects in a 3D model, both in editor and runtime.
 
-![Plugin in Action](Images/plugin-in-action.png)
+<img width="1700" height="460" alt="github-header-banner" src="Images/plugin-in-action.png" />
 *The plugin in action showing the advanced Axis Manager Window with individual piece control and real-time axis visualization*
 
 ## Key Features
