@@ -1,0 +1,23 @@
+# .gitignore específico para ObjectAxesViewer Plugin
+
+# Archivos temporales del plugin
+*.tmp
+*.backup
+*.bak
+
+# Configuraciones locales de usuario
+LocalSettings/
+UserPreferences/
+
+# Archivos de test temporales
+TestResults/
+TestData/
+
+# Mantener estructura esencial
+!Runtime/
+!Editor/
+!Examples/
+!*.cs
+!*.asmdef
+!*.md
+!*.txt

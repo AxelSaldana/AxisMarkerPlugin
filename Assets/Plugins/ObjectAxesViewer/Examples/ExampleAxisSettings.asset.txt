@@ -1,0 +1,61 @@
+# Archivo de Configuración de Ejemplo para AxisPluginSettings
+# 
+# Para usar este archivo:
+# 1. Ve a Tools → Axis Plugin → Create Settings Asset
+# 2. Guarda el asset en tu carpeta Resources como "AxisPluginSettings"
+# 3. Configura los valores según tus necesidades
+# 4. El plugin usará automáticamente esta configuración
+
+# Configuración por Defecto de Ejes
+defaultAxisLength: 0.5
+defaultAxisThickness: 2.0
+defaultShowLabels: true
+defaultLabelOffset: 0.1
+
+# Colores por Defecto
+defaultXAxisColor: {r: 1, g: 0, b: 0, a: 1}  # Rojo
+defaultYAxisColor: {r: 0, g: 1, b: 0, a: 1}  # Verde
+defaultZAxisColor: {r: 0, g: 0, b: 1, a: 1}  # Azul
+
+# Visibilidad por Defecto
+defaultShowXAxis: true
+defaultShowYAxis: true
+defaultShowZAxis: true
+defaultShowAxis: true
+
+# Configuración de Detección
+defaultFilterByRenderer: true
+defaultFilterByCollider: false
+defaultIncludeInactive: false
+defaultAutoDetectOnStart: true
+
+# Configuración de Runtime UI
+defaultCreateRuntimeUI: true
+defaultShowUIOnStart: true
+
+# Configuración de Rendimiento
+maxMarkersPerModel: 100
+enableBatching: true
+updateInterval: 0.1
+
+# Configuraciones Recomendadas por Caso de Uso:
+
+# Para Vehículos:
+# defaultAxisLength: 0.3
+# defaultFilterByRenderer: true
+# defaultShowLabels: false
+
+# Para Arquitectura:
+# defaultAxisLength: 0.2
+# defaultAxisThickness: 1.0
+# defaultShowLabels: false
+
+# Para Educación:
+# defaultAxisLength: 1.0
+# defaultAxisThickness: 3.0
+# defaultShowLabels: true
+
+# Para Debugging:
+# defaultAxisLength: 0.8
+# defaultShowLabels: true
+# defaultIncludeInactive: true

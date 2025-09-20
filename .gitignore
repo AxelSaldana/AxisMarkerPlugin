@@ -1,0 +1,122 @@
+# Unity .gitignore para AxisMarkerPlugin
+
+# ===================================
+# ARCHIVOS TEMPORALES DE UNITY
+# ===================================
+
+# Carpetas generadas por Unity
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# Archivos de cache y temporales
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# ===================================
+# ARCHIVOS DE PROYECTO UNITY
+# ===================================
+
+# Configuraciones locales del usuario
+/UserSettings/
+
+# Archivos de crash reports
+sysinfo.txt
+*.stackdump
+
+# ===================================
+# ARCHIVOS DE VISUAL STUDIO
+# ===================================
+
+# Carpetas de Visual Studio
+/.vs/
+/.vscode/
+
+# Archivos de proyecto generados
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ===================================
+# ARCHIVOS DEL SISTEMA OPERATIVO
+# ===================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# ===================================
+# ARCHIVOS ESPECÍFICOS DEL PLUGIN
+# ===================================
+
+# Archivos de backup del plugin
+*.backup
+*.bak
+*.orig
+
+# Archivos de configuración local (si los hay)
+/Assets/Plugins/ObjectAxesViewer/LocalSettings/
+
+# ===================================
+# MANTENER ESTOS ARCHIVOS
+# ===================================
+
+# Asegurar que estos archivos importantes se incluyan
+!/Assets/
+!/Assets/Plugins/
+!/Assets/Plugins/ObjectAxesViewer/
+!/Assets/Plugins/ObjectAxesViewer/**/*.cs
+!/Assets/Plugins/ObjectAxesViewer/**/*.asmdef
+!/Assets/Plugins/ObjectAxesViewer/**/*.meta
+!/ProjectSettings/
+!/Packages/
+!/README.md
+!/QUICK_START.md
+!/CHANGELOG.md
+
+# ===================================
+# ARCHIVOS DE DOCUMENTACIÓN
+# ===================================
+
+# Mantener documentación
+!*.md
+!*.txt
+
+# ===================================
+# CONFIGURACIÓN DE UNITY PACKAGES
+# ===================================
+
+# Mantener manifest pero ignorar lock
+!/Packages/manifest.json
+/Packages/packages-lock.json
