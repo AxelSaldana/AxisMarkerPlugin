@@ -222,4 +222,55 @@ public class ModelAxisManager : MonoBehaviour
     {
         return modelPieces.Where(p => !p.isVisible).ToList();
     }
+    
+    // Método de debug para diagnosticar problemas de posición
+    [ContextMenu("Debug All Piece Positions")]
+    public void DebugAllPiecePositions()
+    {
+        Debug.Log($"=== DEBUG: Posiciones de todas las piezas en {name} ===");
+        Debug.Log($"Root Model: {(rootModel ? rootModel.name : "None")}");
+        Debug.Log($"Root Position: {(rootModel ? rootModel.transform.position.ToString("F2") : "N/A")}");
+        Debug.Log($"Total Pieces: {modelPieces.Count}");
+        
+        for (int i = 0; i < modelPieces.Count; i++)
+        {
+            var piece = modelPieces[i];
+            if (piece.gameObject != null)
+            {
+                Debug.Log($"  [{i}] {piece.displayName}:");
+                Debug.Log($"      - World Position: {piece.gameObject.transform.position:F2}");
+                Debug.Log($"      - Local Position: {piece.gameObject.transform.localPosition:F2}");
+                Debug.Log($"      - Parent: {(piece.gameObject.transform.parent ? piece.gameObject.transform.parent.name : "None")}");
+                Debug.Log($"      - Has AxisMarker: {(piece.axisMarker != null)}");
+                Debug.Log($"      - Is Visible: {piece.isVisible}");
+                
+                if (piece.axisMarker != null)
+                {
+                    piece.axisMarker.DebugPosition();
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"  [{i}] {piece.displayName}: GameObject is null!");
+            }
+        }
+        Debug.Log("=== END DEBUG ===");
+    }
+    
+    // Activar modo debug en todos los marcadores
+    [ContextMenu("Toggle Debug Mode")]
+    public void ToggleDebugMode()
+    {
+        bool newDebugState = !modelPieces.Any(p => p.axisMarker != null && p.axisMarker.debugMode);
+        
+        foreach (var piece in modelPieces)
+        {
+            if (piece.axisMarker != null)
+            {
+                piece.axisMarker.debugMode = newDebugState;
+            }
+        }
+        
+        Debug.Log($"Debug mode {(newDebugState ? "activado" : "desactivado")} para todos los marcadores");
+    }
 }

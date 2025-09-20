@@ -23,9 +23,81 @@ public class AxisMarkerImproved : MonoBehaviour
     public bool showLabels = true;
     public float labelOffset = 0.1f;
     
+    [Header("Positioning")]
+    public bool useObjectCenter = true;      // Usar centro del objeto (bounds) en lugar de transform.position
+    
+    [Header("Runtime Rendering")]
+    public bool useRuntimeRendering = true;  // Usar LineRenderers en runtime
+    public bool showInPlayMode = true;       // Mostrar en modo Play
+    public Material axisMaterial;            // Material para los LineRenderers
+    
+    // Variables privadas para runtime rendering
+    private LineRenderer xAxisLineRenderer;
+    private LineRenderer yAxisLineRenderer;
+    private LineRenderer zAxisLineRenderer;
+    private GameObject axisContainer;
+    private Vector3 lastPosition;
+    private Quaternion lastRotation;
+    private bool runtimeRenderersCreated = false;
+    
+    private void Start()
+    {
+        if (useRuntimeRendering && Application.isPlaying)
+        {
+            CreateRuntimeRenderers();
+        }
+    }
+    
+    private void Update()
+    {
+        if (useRuntimeRendering && Application.isPlaying && showInPlayMode)
+        {
+            // Verificar si necesitamos crear los renderers
+            if (!runtimeRenderersCreated)
+            {
+                CreateRuntimeRenderers();
+            }
+            
+            // Actualizar solo si la posición o rotación cambió
+            if (transform.position != lastPosition || transform.rotation != lastRotation)
+            {
+                UpdateRuntimeRenderers();
+                lastPosition = transform.position;
+                lastRotation = transform.rotation;
+            }
+        }
+        else if (runtimeRenderersCreated && (!showInPlayMode || !showAxis))
+        {
+            // Ocultar renderers si no deberían mostrarse
+            SetRuntimeRenderersVisibility(false);
+        }
+        else if (runtimeRenderersCreated && showInPlayMode && showAxis)
+        {
+            // Mostrar renderers si deberían mostrarse
+            SetRuntimeRenderersVisibility(true);
+        }
+    }
+    
+    private void OnDestroy()
+    {
+        CleanupRuntimeRenderers();
+    }
+    
     private void OnDrawGizmos()
     {
         if (!showAxis) return;
+        
+        if (debugMode)
+        {
+            // Dibujar informaciÃ³n de debug
+            Gizmos.color = Color.white;
+            Gizmos.DrawWireCube(transform.position, Vector3.one * 0.1f);
+            
+            #if UNITY_EDITOR
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 0.2f, 
+                $"{gameObject.name}\nPos: {transform.position:F2}");
+            #endif
+        }
         
         DrawAxes();
     }
@@ -53,9 +125,10 @@ public class AxisMarkerImproved : MonoBehaviour
     
     private void DrawAxes()
     {
-        Vector3 position = transform.position;
+        // Usar el centro visual del objeto (igual que en runtime)
+        Vector3 position = GetObjectCenter();
         
-        // Eje X (Rojo)
+        // Eje X (Rojo) - Usar la rotaciÃ³n del objeto para los ejes locales
         if (showXAxis)
         {
             Gizmos.color = xAxisColor;
@@ -64,12 +137,12 @@ public class AxisMarkerImproved : MonoBehaviour
             
             if (showLabels)
             {
-                Vector3 labelPos = position + xDirection + Vector3.right * labelOffset;
+                Vector3 labelPos = position + xDirection + transform.right * labelOffset;
                 DrawLabel(labelPos, "X");
             }
         }
         
-        // Eje Y (Verde)
+        // Eje Y (Verde) - Usar la rotaciÃ³n del objeto para los ejes locales
         if (showYAxis)
         {
             Gizmos.color = yAxisColor;
@@ -78,12 +151,12 @@ public class AxisMarkerImproved : MonoBehaviour
             
             if (showLabels)
             {
-                Vector3 labelPos = position + yDirection + Vector3.up * labelOffset;
+                Vector3 labelPos = position + yDirection + transform.up * labelOffset;
                 DrawLabel(labelPos, "Y");
             }
         }
         
-        // Eje Z (Azul)
+        // Eje Z (Azul) - Usar la rotaciÃ³n del objeto para los ejes locales
         if (showZAxis)
         {
             Gizmos.color = zAxisColor;
@@ -92,12 +165,12 @@ public class AxisMarkerImproved : MonoBehaviour
             
             if (showLabels)
             {
-                Vector3 labelPos = position + zDirection + Vector3.forward * labelOffset;
+                Vector3 labelPos = position + zDirection + transform.forward * labelOffset;
                 DrawLabel(labelPos, "Z");
             }
         }
         
-        // Dibujar punto central
+        // Dibujar punto central en la posiciÃ³n del objeto
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(position, axisLength * 0.05f);
     }
@@ -234,5 +307,263 @@ public class AxisMarkerImproved : MonoBehaviour
         showXAxis = x;
         showYAxis = y;
         showZAxis = z;
+        
+        // Recrear renderers si están activos para reflejar los cambios
+        if (runtimeRenderersCreated && Application.isPlaying)
+        {
+            RecreateRuntimeRenderers();
+        }
     }
+    
+    // MÃ©todo para debug - verificar la posiciÃ³n actual
+    public void DebugPosition()
+    {
+        Debug.Log($"AxisMarker en objeto '{gameObject.name}':");
+        Debug.Log($"  - Transform Position: {transform.position:F3}");
+        Debug.Log($"  - Object Center: {GetObjectCenter():F3}");
+        Debug.Log($"  - Use Object Center: {useObjectCenter}");
+        Debug.Log($"  - Posición local: {transform.localPosition:F3}");
+        Debug.Log($"  - Padre: {(transform.parent ? transform.parent.name : "None")}");
+        
+        Renderer renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            Debug.Log($"  - Renderer Bounds Center: {renderer.bounds.center:F3}");
+            Debug.Log($"  - Renderer Bounds Size: {renderer.bounds.size:F3}");
+        }
+        
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            Debug.Log($"  - Collider Bounds Center: {collider.bounds.center:F3}");
+            Debug.Log($"  - Collider Bounds Size: {collider.bounds.size:F3}");
+        }
+    }
+
+    // Método para forzar el debug en OnDrawGizmos
+    [System.NonSerialized]
+    public bool debugMode = false;
+
+    #region Runtime Rendering Methods
+    
+    private Vector3 GetObjectCenter()
+    {
+        // Si no queremos usar el centro del objeto, usar transform.position
+        if (!useObjectCenter)
+        {
+            return transform.position;
+        }
+        
+        // Intentar obtener el centro visual del objeto
+        Renderer renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            // Usar el centro del bounds del renderer (como Unity hace con los gizmos)
+            return renderer.bounds.center;
+        }
+        
+        // Si no hay renderer, intentar con el collider
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            return collider.bounds.center;
+        }
+        
+        // Como último recurso, usar la posición del transform
+        return transform.position;
+    }
+    
+    private void CreateRuntimeRenderers()
+    {
+        if (runtimeRenderersCreated) return;
+
+        // Crear contenedor para los ejes
+        axisContainer = new GameObject($"{gameObject.name}_AxisRenderers");
+        axisContainer.transform.SetParent(transform, false);
+
+        // Crear material por defecto si no se asignó uno
+        if (axisMaterial == null)
+        {
+            axisMaterial = CreateDefaultAxisMaterial();
+        }
+
+        // Crear LineRenderer para eje X
+        if (showXAxis)
+        {
+            xAxisLineRenderer = CreateAxisLineRenderer("X_Axis", xAxisColor);
+        }
+
+        // Crear LineRenderer para eje Y
+        if (showYAxis)
+        {
+            yAxisLineRenderer = CreateAxisLineRenderer("Y_Axis", yAxisColor);
+        }
+
+        // Crear LineRenderer para eje Z
+        if (showZAxis)
+        {
+            zAxisLineRenderer = CreateAxisLineRenderer("Z_Axis", zAxisColor);
+        }
+
+        runtimeRenderersCreated = true;
+        UpdateRuntimeRenderers();
+    }
+
+    private LineRenderer CreateAxisLineRenderer(string name, Color color)
+    {
+        GameObject axisGO = new GameObject(name);
+        axisGO.transform.SetParent(axisContainer.transform, false);
+
+        LineRenderer lr = axisGO.AddComponent<LineRenderer>();
+        lr.material = axisMaterial;
+        lr.startColor = color;
+        lr.endColor = color;
+        lr.startWidth = axisThickness * 0.001f;
+        lr.endWidth = axisThickness * 0.001f;
+        lr.positionCount = 2;
+        lr.useWorldSpace = true;
+        lr.sortingOrder = 1000; // Renderizar encima de otros objetos
+
+        return lr;
+    }
+
+    private Material CreateDefaultAxisMaterial()
+    {
+        // Intentar usar el mejor shader disponible para líneas
+        Shader shader = Shader.Find("Unlit/Color");
+        if (shader == null)
+            shader = Shader.Find("Legacy Shaders/Unlit/Color");
+        if (shader == null)
+            shader = Shader.Find("Sprites/Default");
+        
+        Material mat = new Material(shader);
+        mat.name = "DefaultAxisMaterial";
+        mat.color = Color.white;
+        
+        // Configurar para que sea visible a través de objetos si es posible
+        if (mat.HasProperty("_ZTest"))
+        {
+            mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
+        }
+        
+        return mat;
+    }
+
+    private void UpdateRuntimeRenderers()
+    {
+        if (!runtimeRenderersCreated) return;
+
+        // Obtener la posición central del objeto (como Unity lo hace)
+        Vector3 position = GetObjectCenter();
+
+        // Actualizar eje X
+        if (xAxisLineRenderer != null && showXAxis)
+        {
+            Vector3 xDirection = transform.right * axisLength;
+            xAxisLineRenderer.SetPosition(0, position);
+            xAxisLineRenderer.SetPosition(1, position + xDirection);
+            xAxisLineRenderer.startWidth = axisThickness * 0.001f;
+            xAxisLineRenderer.endWidth = axisThickness * 0.001f;
+            xAxisLineRenderer.startColor = xAxisColor;
+            xAxisLineRenderer.endColor = xAxisColor;
+        }
+
+        // Actualizar eje Y
+        if (yAxisLineRenderer != null && showYAxis)
+        {
+            Vector3 yDirection = transform.up * axisLength;
+            yAxisLineRenderer.SetPosition(0, position);
+            yAxisLineRenderer.SetPosition(1, position + yDirection);
+            yAxisLineRenderer.startWidth = axisThickness * 0.001f;
+            yAxisLineRenderer.endWidth = axisThickness * 0.001f;
+            yAxisLineRenderer.startColor = yAxisColor;
+            yAxisLineRenderer.endColor = yAxisColor;
+        }
+
+        // Actualizar eje Z
+        if (zAxisLineRenderer != null && showZAxis)
+        {
+            Vector3 zDirection = transform.forward * axisLength;
+            zAxisLineRenderer.SetPosition(0, position);
+            zAxisLineRenderer.SetPosition(1, position + zDirection);
+            zAxisLineRenderer.startWidth = axisThickness * 0.001f;
+            zAxisLineRenderer.endWidth = axisThickness * 0.001f;
+            zAxisLineRenderer.startColor = zAxisColor;
+            zAxisLineRenderer.endColor = zAxisColor;
+        }
+    }
+
+    private void SetRuntimeRenderersVisibility(bool visible)
+    {
+        if (axisContainer != null)
+        {
+            axisContainer.SetActive(visible);
+        }
+    }
+
+    private void CleanupRuntimeRenderers()
+    {
+        if (axisContainer != null)
+        {
+            if (Application.isPlaying)
+                Destroy(axisContainer);
+            else
+                DestroyImmediate(axisContainer);
+        }
+
+        xAxisLineRenderer = null;
+        yAxisLineRenderer = null;
+        zAxisLineRenderer = null;
+        axisContainer = null;
+        runtimeRenderersCreated = false;
+    }
+
+    // Método público para recrear los renderers (útil cuando se cambian configuraciones)
+    public void RecreateRuntimeRenderers()
+    {
+        CleanupRuntimeRenderers();
+        if (useRuntimeRendering && Application.isPlaying)
+        {
+            CreateRuntimeRenderers();
+        }
+    }
+
+    // Método público para forzar actualización
+    public void ForceUpdateRuntimeRenderers()
+    {
+        if (runtimeRenderersCreated)
+        {
+            UpdateRuntimeRenderers();
+        }
+    }
+
+    // Context Menu methods para facilitar el uso
+    [ContextMenu("Toggle Runtime Rendering")]
+    public void ToggleRuntimeRendering()
+    {
+        useRuntimeRendering = !useRuntimeRendering;
+        
+        if (useRuntimeRendering && Application.isPlaying)
+        {
+            CreateRuntimeRenderers();
+        }
+        else if (!useRuntimeRendering)
+        {
+            CleanupRuntimeRenderers();
+        }
+    }
+    
+    [ContextMenu("Recreate Runtime Renderers")]
+    public void ContextMenuRecreateRenderers()
+    {
+        RecreateRuntimeRenderers();
+    }
+    
+    [ContextMenu("Force Update Renderers")]
+    public void ContextMenuForceUpdate()
+    {
+        ForceUpdateRuntimeRenderers();
+    }
+    
+    #endregion
 }
