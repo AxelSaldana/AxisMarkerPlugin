@@ -146,7 +146,8 @@ public class RuntimeAxisController : MonoBehaviour
             }
             else
             {
-                toggleGO = CreateUIToggle(piece.displayName, pieceListParent);
+                Toggle createdToggle = CreateUIToggle(piece.displayName, pieceListParent);
+                toggleGO = createdToggle.gameObject;
             }
             
             Toggle toggle = toggleGO.GetComponent<Toggle>();

@@ -110,7 +110,10 @@ public static class AxisPluginMenus
                     {
                         foreach (var marker in markers)
                         {
-                            DestroyImmediate(marker);
+                            UnityEditor.EditorApplication.delayCall += () => {
+                                if (marker != null)
+                                    UnityEngine.Object.DestroyImmediate(marker);
+                            };
                         }
                         Debug.Log($"{markers.Length} marcadores eliminados");
                     }
@@ -159,7 +162,7 @@ public static class AxisPluginMenus
         
         foreach (var manager in managers)
         {
-            AxisUtilities.Debug.LogAxisManagerInfo(manager);
+            AxisUtilities.DebugTools.LogAxisManagerInfo(manager);
         }
         
         if (managers.Count > 0)
@@ -190,7 +193,7 @@ public static class AxisPluginMenus
             {
                 if (marker != null)
                 {
-                    DestroyImmediate(marker);
+                    UnityEngine.Object.DestroyImmediate(marker);
                 }
             }
             

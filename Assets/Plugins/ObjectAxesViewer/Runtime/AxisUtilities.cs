@@ -10,7 +10,7 @@ public static class AxisUtilities
     {
         if (rootObject == null)
         {
-            Debug.LogError("Root object is null!");
+            UnityEngine.Debug.LogError("Root object is null!");
             return null;
         }
         
@@ -35,7 +35,7 @@ public static class AxisUtilities
     {
         if (manager == null)
         {
-            Debug.LogError("ModelAxisManager is null!");
+            UnityEngine.Debug.LogError("ModelAxisManager is null!");
             return null;
         }
         
@@ -175,7 +175,7 @@ public static class AxisUtilities
     /// <summary>
     /// Herramientas de debugging
     /// </summary>
-    public static class Debug
+    public static class DebugTools
     {
         public static void LogAxisManagerInfo(ModelAxisManager manager)
         {

@@ -231,10 +231,10 @@ public class AxisEventHandler : MonoBehaviour
 
 ```csharp
 // Información del manager
-AxisUtilities.Debug.LogAxisManagerInfo(manager);
+AxisUtilities.DebugTools.LogAxisManagerInfo(manager);
 
 // Lista de todas las piezas
-AxisUtilities.Debug.LogAllPieces(manager);
+AxisUtilities.DebugTools.LogAllPieces(manager);
 
 // Encontrar todos los managers en la escena
 var allManagers = AxisUtilities.FindAllAxisManagers();
