@@ -80,6 +80,14 @@ public class RuntimeAxisController : MonoBehaviour
         CreateUIText("Axis Size:", settingsPanel.transform, 12);
         axisSizeSlider = CreateUISlider(settingsPanel.transform, 0.1f, 2f, 0.5f);
         
+        CreateUIText("Axis Thickness:", settingsPanel.transform, 12);
+        GameObject thicknessSlider = CreateUISlider(settingsPanel.transform, 1f, 150f, 2f).gameObject;
+        Slider thicknessSliderComponent = thicknessSlider.GetComponent<Slider>();
+        if (thicknessSliderComponent != null)
+        {
+            thicknessSliderComponent.onValueChanged.AddListener(OnAxisThicknessChanged);
+        }
+        
         labelsToggle = CreateUIToggle("Show Labels", settingsPanel.transform);
         
         // Crear area de scroll para la lista de piezas
@@ -174,6 +182,15 @@ public class RuntimeAxisController : MonoBehaviour
         if (modelManager != null)
         {
             modelManager.globalAxisLength = value;
+            modelManager.UpdateGlobalSettings();
+        }
+    }
+    
+    private void OnAxisThicknessChanged(float value)
+    {
+        if (modelManager != null)
+        {
+            modelManager.globalAxisThickness = value;
             modelManager.UpdateGlobalSettings();
         }
     }

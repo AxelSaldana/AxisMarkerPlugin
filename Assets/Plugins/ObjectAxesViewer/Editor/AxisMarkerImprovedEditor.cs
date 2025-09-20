@@ -34,7 +34,7 @@ public class AxisMarkerImprovedEditor : Editor
             EditorGUILayout.LabelField("Size Settings", EditorStyles.boldLabel);
             EditorGUI.BeginChangeCheck();
             marker.axisLength = EditorGUILayout.Slider("Axis Length", marker.axisLength, 0.1f, 5f);
-            marker.axisThickness = EditorGUILayout.Slider("Axis Thickness", marker.axisThickness, 1f, 10f);
+            marker.axisThickness = EditorGUILayout.Slider("Axis Thickness", marker.axisThickness, 1f, 150f);
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(marker);

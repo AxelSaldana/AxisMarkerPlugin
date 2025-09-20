@@ -9,6 +9,7 @@ public class AxisPluginSettings : ScriptableObject
 {
     [Header("Default Axis Settings")]
     public float defaultAxisLength = 0.5f;
+    [Range(1f, 150f)]
     public float defaultAxisThickness = 2f;
     public bool defaultShowLabels = true;
     public float defaultLabelOffset = 0.1f;
@@ -126,7 +127,7 @@ public class AxisPluginSettings : ScriptableObject
     private void OnValidate()
     {
         defaultAxisLength = Mathf.Clamp(defaultAxisLength, 0.1f, 10f);
-        defaultAxisThickness = Mathf.Clamp(defaultAxisThickness, 1f, 10f);
+        defaultAxisThickness = Mathf.Clamp(defaultAxisThickness, 1f, 150f);
         defaultLabelOffset = Mathf.Clamp(defaultLabelOffset, 0f, 1f);
         maxMarkersPerModel = Mathf.Clamp(maxMarkersPerModel, 1, 1000);
         updateInterval = Mathf.Clamp(updateInterval, 0.01f, 1f);

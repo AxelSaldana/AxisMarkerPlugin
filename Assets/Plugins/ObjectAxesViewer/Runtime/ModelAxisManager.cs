@@ -31,6 +31,7 @@ public class ModelAxisManager : MonoBehaviour
     
     [Header("Axis Display Settings")]
     public float globalAxisLength = 0.5f;
+    [Range(1f, 150f)]
     public float globalAxisThickness = 2f;
     public bool showLabels = true;
     

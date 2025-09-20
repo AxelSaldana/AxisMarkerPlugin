@@ -1,138 +1,141 @@
-# Advanced Axis Marker Plugin para Unity
+# Advanced Axis Marker Plugin for Unity
 
-Un plugin completo para visualizar los ejes de coordenadas (X, Y, Z) de todos los objetos en un modelo 3D, tanto en el editor como en runtime.
+A complete plugin to visualize coordinate axes (X, Y, Z) of all objects in a 3D model, both in editor and runtime.
 
-## Características Principales
+![Plugin in Action](Images/plugin-in-action.png)
+*The plugin in action showing the advanced Axis Manager Window with individual piece control and real-time axis visualization*
 
-### ✨ Funcionalidades
-- **Visualización de Ejes**: Muestra ejes X (rojo), Y (verde), Z (azul) con flechas y etiquetas
-- **Control Individual**: Activa/desactiva ejes por pieza y por eje individual
-- **Detección Automática**: Encuentra automáticamente todas las piezas de un modelo
-- **Editor y Runtime**: Funciona tanto en el editor de Unity como durante la ejecución
-- **Interfaz Completa**: Ventana de editor avanzada y UI de runtime
-- **Filtros Inteligentes**: Filtra objetos por Renderer, Collider, nombres, etc.
-- **Presets**: Configuraciones predefinidas para diferentes casos de uso
+## Key Features
 
-### 🎯 Casos de Uso
-- Debugging de orientación de objetos
-- Visualización de sistemas de coordenadas
-- Educación y demostración de conceptos 3D
-- Herramientas de desarrollo para equipos
-- Análisis de modelos complejos
+### ✨ Functionality
+- **Axis Visualization**: Shows X (red), Y (green), Z (blue) axes with arrows and labels
+- **Individual Control**: Enable/disable axes per piece and per individual axis
+- **Automatic Detection**: Automatically finds all pieces of a model
+- **Editor & Runtime**: Works both in Unity editor and during runtime
+- **Complete Interface**: Advanced editor window and runtime UI
+- **Smart Filters**: Filter objects by Renderer, Collider, names, etc.
+- **Presets**: Predefined configurations for different use cases
 
-## Instalación
+### 🎯 Use Cases
+- Object orientation debugging
+- Coordinate system visualization
+- Education and 3D concept demonstration
+- Development tools for teams
+- Complex model analysis
 
-1. Copia la carpeta `Assets/Plugins/ObjectAxesViewer` a tu proyecto
-2. Unity compilará automáticamente los scripts
-3. Accede al plugin desde `Window > Axis Viewer Manager`
+## Installation
 
-## Uso Rápido
+1. Copy the `Assets/Plugins/ObjectAxesViewer` folder to your project
+2. Unity will automatically compile the scripts
+3. Access the plugin from `Window > Axis Viewer Manager`
 
-### En el Editor
+## Quick Start
 
-1. **Abrir la Ventana del Manager**:
-   - Ve a `Window > Axis Viewer Manager`
+### In Editor
 
-2. **Configurar un Modelo**:
-   - Selecciona tu objeto raíz en "Root Object"
-   - Haz clic en "Setup Manager"
-   - El plugin detectará automáticamente todas las piezas
+1. **Open the Manager Window**:
+   - Go to `Window > Axis Viewer Manager`
 
-3. **Controlar la Visualización**:
-   - Usa "Show All", "Hide All", "Toggle All" para control global
-   - Usa los toggles individuales para cada pieza
-   - Controla ejes X, Y, Z individualmente
+2. **Setup a Model**:
+   - Select your root object in "Root Object"
+   - Click "Setup Manager"
+   - The plugin will automatically detect all pieces
 
-### En Runtime
+3. **Control Visualization**:
+   - Use "Show All", "Hide All", "Toggle All" for global control
+   - Use individual toggles for each piece
+   - Control X, Y, Z axes individually
 
-1. **Configuración Automática**:
+### In Runtime
+
+1. **Automatic Setup**:
    ```csharp
-   // Agregar a cualquier GameObject
-   ModelAxisManager manager = AxisUtilities.SetupAxisMarkersForModel(miModelo);
+   // Add to any GameObject
+   ModelAxisManager manager = AxisUtilities.SetupAxisMarkersForModel(myModel);
    RuntimeAxisController controller = AxisUtilities.CreateRuntimeController(manager, true);
    ```
 
-2. **Control Programático**:
+2. **Programmatic Control**:
    ```csharp
-   // Mostrar/ocultar todos los ejes
+   // Show/hide all axes
    manager.ShowAllAxes();
    manager.HideAllAxes();
    
-   // Control por pieza específica
-   manager.SetPieceVisibility("NombrePieza", true);
+   // Control specific piece
+   manager.SetPieceVisibility("PieceName", true);
    
-   // Configuración global
+   // Global configuration
    manager.globalAxisLength = 1.0f;
    manager.UpdateGlobalSettings();
    ```
 
-## Componentes del Sistema
+## System Components
 
-### 🔧 Componentes Principales
+### 🔧 Main Components
 
 #### `AxisMarkerImproved`
-- Componente base que dibuja los ejes en un GameObject
-- Control individual de ejes X, Y, Z
-- Configuración de colores, tamaño y etiquetas
-- Funciona con `OnDrawGizmos` para visualización en editor
+- Base component that draws axes on a GameObject
+- Individual control of X, Y, Z axes
+- Color, size and label configuration
+- Works with `OnDrawGizmos` for editor visualization
 
 #### `ModelAxisManager`
-- Gestiona todos los marcadores de eje de un modelo
-- Detección automática de piezas
-- Configuración global y filtros
-- API completa para control programático
+- Manages all axis markers of a model
+- Automatic piece detection
+- Global configuration and filters
+- Complete API for programmatic control
 
 #### `RuntimeAxisController`
-- Interfaz de usuario para runtime
-- Crea automáticamente UI Canvas
-- Controles interactivos para el usuario final
-- Integración completa con ModelAxisManager
+- Runtime user interface
+- Automatically creates UI Canvas
+- Interactive controls for end users
+- Complete integration with ModelAxisManager
 
-### 🎨 Herramientas de Editor
+### 🎨 Editor Tools
 
 #### `ImprovedAxisManagerWindow`
-- Ventana de editor avanzada (`Window > Axis Viewer Manager`)
-- Lista completa de piezas con búsqueda
-- Configuración global en tiempo real
-- Herramientas de filtrado y selección
+- Advanced editor window (`Window > Axis Viewer Manager`)
+- Complete piece list with search
+- Real-time global configuration
+- Filtering and selection tools
 
 #### `ModelAxisManagerEditor`
-- Inspector personalizado para ModelAxisManager
-- Controles rápidos y estadísticas
-- Herramientas de selección avanzadas
-- Presets de configuración rápida
+- Custom inspector for ModelAxisManager
+- Quick controls and statistics
+- Advanced selection tools
+- Quick configuration presets
 
-## Configuración Avanzada
+## Advanced Configuration
 
-### Filtros de Detección
+### Detection Filters
 
 ```csharp
 ModelAxisManager manager = GetComponent<ModelAxisManager>();
 
-// Configurar filtros
-manager.filterByRenderer = true;      // Solo objetos con Renderer
-manager.filterByCollider = false;     // Incluir objetos sin Collider
-manager.includeInactivePieces = true; // Incluir objetos inactivos
+// Configure filters
+manager.filterByRenderer = true;      // Only objects with Renderer
+manager.filterByCollider = false;     // Include objects without Collider
+manager.includeInactivePieces = true; // Include inactive objects
 
-// Excluir objetos por nombre
+// Exclude objects by name
 manager.AddExcludeName("Helper");
 manager.AddExcludeName("Temp");
 
-// Aplicar cambios
+// Apply changes
 manager.DetectModelPieces();
 ```
 
-### Presets Personalizados
+### Custom Presets
 
 ```csharp
-// Usar presets predefinidos
+// Use predefined presets
 var preset = AxisUtilities.Presets.Large;
 preset.ApplyToMarker(axisMarker);
 
-// Crear preset personalizado
+// Create custom preset
 var customPreset = new AxisUtilities.AxisPreset
 {
-    name = "Mi Preset",
+    name = "My Preset",
     axisLength = 0.8f,
     axisThickness = 4f,
     showLabels = true,
@@ -140,10 +143,10 @@ var customPreset = new AxisUtilities.AxisPreset
 };
 ```
 
-### Configuración de Colores
+### Color Configuration
 
 ```csharp
-// Cambiar colores globalmente
+// Change colors globally
 foreach(var piece in manager.ModelPieces)
 {
     AxisUtilities.SetCustomAxisColors(
@@ -155,47 +158,47 @@ foreach(var piece in manager.ModelPieces)
 }
 ```
 
-## API de Runtime
+## Runtime API
 
-### Control Básico
+### Basic Control
 
 ```csharp
-// Obtener el manager
+// Get the manager
 ModelAxisManager manager = FindObjectOfType<ModelAxisManager>();
 
-// Mostrar/ocultar todo
+// Show/hide all
 manager.ShowAllAxes();
 manager.HideAllAxes();
 manager.ToggleAllAxes();
 
-// Control por pieza
-manager.SetPieceVisibility("Rueda1", true);
-manager.SetPieceVisibility("Motor", false);
+// Control by piece
+manager.SetPieceVisibility("Wheel1", true);
+manager.SetPieceVisibility("Engine", false);
 
-// Buscar piezas
-ModelPiece pieza = manager.GetPieceByName("Chasis");
-List<ModelPiece> visibles = manager.GetVisiblePieces();
+// Find pieces
+ModelPiece piece = manager.GetPieceByName("Chassis");
+List<ModelPiece> visible = manager.GetVisiblePieces();
 ```
 
-### Configuración Dinámica
+### Dynamic Configuration
 
 ```csharp
-// Cambiar configuración global
+// Change global configuration
 manager.globalAxisLength = 1.5f;
 manager.globalAxisThickness = 3f;
 manager.showLabels = false;
 manager.UpdateGlobalSettings();
 
-// Configurar pieza específica
-var marker = manager.GetPieceByName("Pieza1").axisMarker;
-marker.SetAxisVisibility(true, false, true); // Solo X y Z
+// Configure specific piece
+var marker = manager.GetPieceByName("Piece1").axisMarker;
+marker.SetAxisVisibility(true, false, true); // Only X and Z
 marker.axisLength = 0.3f;
 ```
 
-### Eventos y Callbacks
+### Events and Callbacks
 
 ```csharp
-// Detectar cambios (implementar según necesidades)
+// Detect changes (implement as needed)
 public class AxisEventHandler : MonoBehaviour
 {
     private ModelAxisManager manager;
@@ -207,13 +210,13 @@ public class AxisEventHandler : MonoBehaviour
     
     void Update()
     {
-        // Ejemplo: Toggle con tecla
+        // Example: Toggle with key
         if (Input.GetKeyDown(KeyCode.Space))
         {
             manager.ToggleAllAxes();
         }
         
-        // Ejemplo: Control por número
+        // Example: Control by number
         for (int i = 1; i <= 9; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha0 + i) && i <= manager.ModelPieces.Count)
@@ -227,71 +230,71 @@ public class AxisEventHandler : MonoBehaviour
 }
 ```
 
-## Herramientas de Debugging
+## Debugging Tools
 
 ```csharp
-// Información del manager
+// Manager information
 AxisUtilities.DebugTools.LogAxisManagerInfo(manager);
 
-// Lista de todas las piezas
+// List all pieces
 AxisUtilities.DebugTools.LogAllPieces(manager);
 
-// Encontrar todos los managers en la escena
+// Find all managers in scene
 var allManagers = AxisUtilities.FindAllAxisManagers();
 foreach(var mgr in allManagers)
 {
-    Debug.Log($"Manager encontrado: {mgr.name}");
+    Debug.Log($"Manager found: {mgr.name}");
 }
 ```
 
-## Mejores Prácticas
+## Best Practices
 
-### 🎯 Rendimiento
-- Usa filtros para reducir el número de marcadores innecesarios
-- Desactiva etiquetas si no las necesitas
-- Considera usar presets "Small" para modelos complejos
+### 🎯 Performance
+- Use filters to reduce unnecessary markers
+- Disable labels if you don't need them
+- Consider using "Small" presets for complex models
 
-### 🎨 Visualización
-- Ajusta `axisLength` según el tamaño de tu modelo
-- Usa colores contrastantes para mejor visibilidad
-- Activa solo los ejes que necesites ver
+### 🎨 Visualization
+- Adjust `axisLength` according to your model size
+- Use contrasting colors for better visibility
+- Enable only the axes you need to see
 
-### 🔧 Desarrollo
-- Usa `ModelAxisManager` como componente principal
-- Implementa `RuntimeAxisController` para interfaces de usuario
-- Aprovecha los presets para configuraciones rápidas
+### 🔧 Development
+- Use `ModelAxisManager` as the main component
+- Implement `RuntimeAxisController` for user interfaces
+- Take advantage of presets for quick configurations
 
-## Solución de Problemas
+## Troubleshooting
 
-### Los ejes no se ven
-- Verifica que `showAxis` esté activado
-- Comprueba que el objeto tenga un `AxisMarkerImproved`
-- Asegúrate de que `axisLength` sea apropiado para tu escala
+### Axes not visible
+- Verify that `showAxis` is enabled
+- Check that the object has an `AxisMarkerImproved`
+- Make sure `axisLength` is appropriate for your scale
 
-### Rendimiento lento
-- Reduce el número de marcadores activos
-- Desactiva etiquetas si no las necesitas
-- Usa filtros más restrictivos
+### Slow performance
+- Reduce the number of active markers
+- Disable labels if you don't need them
+- Use more restrictive filters
 
-### UI de runtime no aparece
-- Verifica que `RuntimeAxisController` esté configurado
-- Comprueba que `createUIAutomatically` esté activado
-- Asegúrate de que hay un `EventSystem` en la escena
+### Runtime UI doesn't appear
+- Verify that `RuntimeAxisController` is configured
+- Check that `createUIAutomatically` is enabled
+- Make sure there's an `EventSystem` in the scene
 
-## Extensiones y Personalización
+## Extensions and Customization
 
-El plugin está diseñado para ser extensible. Puedes:
+The plugin is designed to be extensible. You can:
 
-- Crear nuevos tipos de marcadores heredando de `AxisMarkerImproved`
-- Implementar sistemas de guardado/carga de configuraciones
-- Agregar nuevos filtros de detección
-- Crear interfaces de usuario personalizadas
-- Integrar con otros sistemas de visualización
+- Create new marker types by inheriting from `AxisMarkerImproved`
+- Implement configuration save/load systems
+- Add new detection filters
+- Create custom user interfaces
+- Integrate with other visualization systems
 
-## Licencia
+## License
 
-Este plugin es de uso libre para proyectos personales y comerciales.
+This plugin is free to use for personal and commercial projects.
 
 ---
 
-**¿Necesitas ayuda?** Revisa los scripts de ejemplo en la carpeta `Runtime` o consulta los comentarios en el código fuente.
+**Need help?** Check the example scripts in the `Runtime` folder or consult the comments in the source code.

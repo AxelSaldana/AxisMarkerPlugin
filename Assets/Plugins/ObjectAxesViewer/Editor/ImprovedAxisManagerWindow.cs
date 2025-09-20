@@ -151,7 +151,7 @@ public class ImprovedAxisManagerWindow : EditorWindow
             EditorGUI.BeginChangeCheck();
             
             globalAxisLength = EditorGUILayout.Slider("Axis Length", globalAxisLength, 0.1f, 2f);
-            globalAxisThickness = EditorGUILayout.Slider("Axis Thickness", globalAxisThickness, 1f, 5f);
+            globalAxisThickness = EditorGUILayout.Slider("Axis Thickness", globalAxisThickness, 1f, 150f);
             globalShowLabels = EditorGUILayout.Toggle("Show Labels", globalShowLabels);
             
             if (EditorGUI.EndChangeCheck())
